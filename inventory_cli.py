@@ -1,7 +1,7 @@
 import click
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Category, Product  # Import your SQLAlchemy classes
+from models import Category, Product 
 from datetime import datetime
 
 @click.command()
