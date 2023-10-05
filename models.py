@@ -15,6 +15,7 @@ class Category(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    products = relationship("Product", back_populates="category")
 
 class Inventory(Base):
     __tablename__ = 'inventory'
@@ -29,15 +30,15 @@ class Product(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     description = Column(String)
-    category_id = Column(Integer, ForeignKey('categories.id'))
     price = Column(Float)
     date_added = Column(DateTime, default=datetime.utcnow)
-    
-    
+    category_id = Column(Integer, ForeignKey('categories.id'))
+    category = relationship("Category", back_populates="products")
     inventory = relationship("Inventory", uselist=False, back_populates="product")
 
-    def __init__(self, name, description, category, price):
+    def __init__(self, name, description, price, category=None):
         self.name = name
         self.description = description
-        self.category = category
         self.price = price
+        self.category = category
+        
