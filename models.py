@@ -63,6 +63,27 @@ def add_product(session):
         session.commit()
 
         print("Product added successfully!")
+def view_products(session):
+    # Query all products from the database
+    products = session.query(Product).all()
+
+    # Check if there are any products
+    if not products:
+        print("No products found.")
+    else:
+        print("List of Products:")
+        for product in products:
+            display_product_info(product)
+            print("-" * 40)
+
+def display_product_info(product):
+    print(f'ID: {product.id}')
+    print(f'Name: {product.name}')
+    print(f'Description: {product.description}')
+    print(f'Price: {product.price}')
+    print(f'Category: {product.category.name if product.category else "N/A"}')
+    print(f'Date Added: {product.date_added}')
+    print("-" * 40)         
 
 if __name__ == "__main__": 
     engine = create_engine('sqlite:///inventory.db')       
@@ -87,5 +108,7 @@ if __name__ == "__main__":
         choice = input("Enter your choice (1/2/3/4/5): ")
         if choice == "1":
             add_product(session) 
+        elif choice == "2":
+            view_products(session)    
 
         
