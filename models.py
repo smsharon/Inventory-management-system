@@ -39,7 +39,30 @@ class Product(Base):
         self.price = price
         self.category = category
 
+def add_product(session):
+    while True:
+        # Take user input for product details
+        name = input("Enter the product name (or type 'cancel' to go back to the main menu): ")
+        
+        if name.lower() == 'cancel':
+            # If the user types 'cancel', exit the function and return to the main menu
+            return
+        
+        description = input("Enter the product description: ")
+        price = float(input("Enter the product price: "))
+        category_name = input("Enter the product category: ")
 
+        # Check if the category already exists in the database, or create it if not
+        category = session.query(Category).filter_by(name=category_name).first()
+        if not category:
+            category = Category(name=category_name)
+
+        # Create a new Product object and add it to the session
+        new_product = Product(name=name, description=description, price=price, category=category)
+        session.add(new_product)
+        session.commit()
+
+        print("Product added successfully!")
 
 if __name__ == "__main__": 
     engine = create_engine('sqlite:///inventory.db')       
@@ -62,5 +85,7 @@ if __name__ == "__main__":
         
         print(menu)
         choice = input("Enter your choice (1/2/3/4/5): ")
+        if choice == "1":
+            add_product(session) 
 
         
