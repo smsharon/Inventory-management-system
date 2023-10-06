@@ -3,10 +3,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker,relationship,declarative_base
 from datetime import datetime
 
-engine = create_engine('sqlite:///inventory.db')
 
 Base = declarative_base()
-Session = sessionmaker(bind=engine)
 
 class Category(Base):
     __tablename__ = 'categories'
@@ -40,5 +38,29 @@ class Product(Base):
         self.description = description
         self.price = price
         self.category = category
+
+
+
+if __name__ == "__main__": 
+    engine = create_engine('sqlite:///inventory.db')       
+    Base.metadata.create_all(engine)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    while True:
+        menu = '''
+        ========================================================
+            INVENTORY MANAGEMENT SYSTEM
+        ========================================================
+            1: ADD PRODUCT                          
+            2: VIEW PRODUCTS
+            3: UPDATE PRODUCT DETAILS
+            4: SEARCH PRODUCT
+            5: EXIT
+        ========================================================
+        '''
         
-Base.metadata.create_all(engine)
+        print(menu)
+        choice = input("Enter your choice (1/2/3/4/5): ")
+
+        
