@@ -83,7 +83,51 @@ def display_product_info(product):
     print(f'Price: {product.price}')
     print(f'Category: {product.category.name if product.category else "N/A"}')
     print(f'Date Added: {product.date_added}')
-    print("-" * 40)         
+    print("-" * 40) 
+def update_product_details(session):
+    # Display a list of products  to choose from
+    print("Select a product to update:")
+    products = session.query(Product).all()
+
+    if not products:
+        print("No products found.")
+        return
+
+    for product in products:
+        print(f"{product.id}: {product.name}")
+
+    product_id = input("Enter the ID of the product you want to update: ")
+    
+    # Check if the entered ID is valid
+    try:
+        product_id = int(product_id)
+    except ValueError:
+        print("Invalid product ID. Please enter a valid ID.")
+        return
+
+    product = session.query(Product).filter_by(id=product_id).first()
+    
+    if not product:
+        print("Product not found.")
+        return
+
+    # update product details
+    print("Current product details:")
+    display_product_info(product)
+
+    print("Enter updated product details:")
+    product.name = input("Name (press Enter to keep the current name): ") or product.name
+    product.description = input("Description (press Enter to keep the current description): ") or product.description
+    try:
+        product.price = float(input("Price (press Enter to keep the current price): ") or product.price)
+    except ValueError:
+        print("Invalid price. Price remains unchanged.")
+
+    
+    session.commit()
+
+    print("Product details updated successfully!")
+                    
 
 if __name__ == "__main__": 
     engine = create_engine('sqlite:///inventory.db')       
@@ -110,5 +154,6 @@ if __name__ == "__main__":
             add_product(session) 
         elif choice == "2":
             view_products(session)    
-
+        elif choice == "3":
+            update_product_details(session)
         
