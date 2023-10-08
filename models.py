@@ -71,23 +71,24 @@ def add_product(session):
         print("Product added successfully!")
 def view_products(session):
     # Query all products from the database
-    products = session.query(Product).all()
+    products = session.query(Product, Inventory.quantity).join(Inventory).all()
 
     # Check if there are any products
     if not products:
         print("No products found.")
     else:
         print("List of Products:")
-        for product in products:
-            display_product_info(product)
+        for product, quantity in products:
+            display_product_info(product, quantity)
             print("-" * 40)
 
-def display_product_info(product):
+def display_product_info(product, quantity):
     print(f'ID: {product.id}')
     print(f'Name: {product.name}')
     print(f'Description: {product.description}')
     print(f'Price: {product.price}')
     print(f'Category: {product.category.name if product.category else "N/A"}')
+    print(f'Quantity in Stock: {quantity}')
     print(f'Date Added: {product.date_added}')
     print("-" * 40) 
 def update_product_details(session):
