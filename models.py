@@ -142,7 +142,38 @@ def search_product(session):
         print("Search results:")
         for product in products:
             display_product_info(product)
-            print("-" * 40)    
+            print("-" * 40)  
+
+def delete_product(session):
+    print("Delete a product:")
+    product_id = input("Enter the ID of the product you want to delete: ")
+
+    try:
+        product_id = int(product_id)
+    except ValueError:
+        print("Invalid product ID. Please enter a valid ID.")
+        return
+
+    product = session.query(Product).filter_by(id=product_id).first()
+    
+    if not product:
+        print("Product not found.")
+        return
+
+    # Confirm the deletion 
+    print("Are you sure you want to delete this product?")
+    display_product_info(product)
+
+    confirmation = input("Enter 'yes' to confirm, or press Enter to cancel: ")
+
+    if confirmation.lower() == 'yes':
+        # Delete the product from the database
+        session.delete(product)
+        session.commit()
+        print("Product deleted successfully!")
+    else:
+        print("Deletion canceled.")
+
                     
 
 if __name__ == "__main__": 
@@ -160,7 +191,8 @@ if __name__ == "__main__":
             2: VIEW PRODUCTS
             3: UPDATE PRODUCT DETAILS
             4: SEARCH PRODUCT
-            5: EXIT
+            5: DELETE PRODUCT
+            6: EXIT
         ========================================================
         '''
         
@@ -173,5 +205,7 @@ if __name__ == "__main__":
         elif choice == "3":
             update_product_details(session)
         elif choice == "4":
-            search_product(session)    
+            search_product(session)  
+        elif choice == "5":
+            delete_product(session)      
         
