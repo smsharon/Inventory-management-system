@@ -51,6 +51,7 @@ def add_product(session):
         description = input("Enter the product description: ")
         price = float(input("Enter the product price: "))
         category_name = input("Enter the product category: ")
+        initial_quantity = int(input("Enter the initial quantity in stock: "))
 
         # Check if the category already exists in the database, or create it if not
         category = session.query(Category).filter_by(name=category_name).first()
@@ -61,6 +62,11 @@ def add_product(session):
         new_product = Product(name=name, description=description, price=price, category=category)
         session.add(new_product)
         session.commit()
+        # Create a new Inventory entry with the initial quantity
+        inventory_entry = Inventory(product=new_product, quantity=initial_quantity)
+        session.add(inventory_entry)
+        session.commit()
+
 
         print("Product added successfully!")
 def view_products(session):
