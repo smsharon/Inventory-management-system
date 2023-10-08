@@ -197,7 +197,7 @@ if __name__ == "__main__":
         '''
         
         print(menu)
-        choice = input("Enter your choice (1/2/3/4/5): ")
+        choice = input("Enter your choice (1/2/3/4/5/6): ")
         if choice == "1":
             add_product(session) 
         elif choice == "2":
@@ -207,5 +207,10 @@ if __name__ == "__main__":
         elif choice == "4":
             search_product(session)  
         elif choice == "5":
-            delete_product(session)      
+            delete_product(session) 
+        elif choice == "6":
+            # End the program
+            break
+        else:
+            print("Invalid choice. Please choose a valid option (1/2/3/4/5/6).")         
         
