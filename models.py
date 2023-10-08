@@ -127,6 +127,22 @@ def update_product_details(session):
     session.commit()
 
     print("Product details updated successfully!")
+def search_product(session):
+    print("Search for a product:")
+    search_term = input("Enter a product name or category: ")
+
+    # Query products that match the search term (either in name or category name)
+    products = session.query(Product).join(Category).filter(
+        (Product.name.ilike(f'%{search_term}%')) | (Category.name.ilike(f'%{search_term}%'))
+    ).all()
+
+    if not products:
+        print("No products found.")
+    else:
+        print("Search results:")
+        for product in products:
+            display_product_info(product)
+            print("-" * 40)    
                     
 
 if __name__ == "__main__": 
@@ -156,4 +172,6 @@ if __name__ == "__main__":
             view_products(session)    
         elif choice == "3":
             update_product_details(session)
+        elif choice == "4":
+            search_product(session)    
         
